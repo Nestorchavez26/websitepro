@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Private Space</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #fff0f5;
+            color: #333;
+            text-align: center;
+        }
+
+        header {
+            background-color: #ff6f91;
+            color: white;
+            padding: 1rem 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .login-form {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            width: 300px;
+            text-align: center;
+        }
+
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+            color: #ff6f91;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #ff6f91;
+            border: none;
+            border-radius: 5px;
+            color: rgb(255, 255, 255);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .login-form button:hover {
+            background-color: #e65578;
+            transform: scale(1.05);
+        }
+
+        .theme-selector {
+            margin: 1rem 0;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .gallery .page {
+            width: 300px;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .gallery .page-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .gallery .page:hover .page-inner {
+            transform: rotateY(180deg);
+        }
+
+        .gallery .page-front,
+        .gallery .page-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery .page-front {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery .page-front img {
+            max-width: 100%;
+            max-height: 70%;
+            border-radius: 10px;
+        }
+
+        .gallery .page-front textarea {
+            margin-top: 1rem;
+            width: 90%;
+            height: 50px;
+            border: 1px solid #ff6f91;
+            border-radius: 5px;
+            resize: none;
+            font-size: 0.9rem;
+        }
+
+        .gallery .page-back {
+            background-color: #ff003c;
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .theme-love {
+            background-color: #fff0f5;
+            background-image: url('https://img.freepik.com/vector-gratis/patron-corazon-amor-decorativo-lindo-papel-envolver_1017-49715.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #68006b;
+        }
+
+        .theme-love header,
+        .theme-love footer {
+            background-color: #ff6f91;
+            color: white;
+        }
+
+        .theme-spiderman {
+            background-color: #000130;
+            background-image: url('https://wallpapersok.com/images/hd/amazing-spiderman-comic-book-l3zjt6j99r3h41qj.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #ffffff;
+        }
+
+        .theme-spiderman header,
+        .theme-spiderman footer {
+            background-color: #e62429;
+            color: white;
+        }
+
+        .theme-one-direction {
+            background-color: #141414;
+            background-image: url('https://i.pinimg.com/originals/4d/b2/cf/4db2cfaeffe3eec25ac6c7e35123042f.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            color: #a80000;
+        }
+
+        .theme-one-direction header,
+        .theme-one-direction footer {
+            background-color: #970000;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="theme-love">
+    <header class="fade-in" id="header-text">
+        Nuestro lugar de recuerdos❤
+    </header>
+    <main>
+        <section class="login-form" id="login-section">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <button type="button" onclick="authenticateUser()">Login</button>
+            </form>
+        </section>
+
+        <section class="theme-selector" id="theme-section" style="display: none;">
+            <h3>Aquí puedes cambiar el fondo de la galería</h3>
+            <button class="interactive-button" onclick="setTheme('theme-love')">Love</button>
+            <button class="interactive-button" onclick="setTheme('theme-spiderman')">Spiderman</button>
+            <button class="interactive-button" onclick="setTheme('theme-one-direction')">One Direction</button>
+        </section>
+
+        <section class="gallery" id="gallery-section" style="display: none;">
+            <h1>Bienvenida a nuestra página privada corazón</h1>
+            <p>Esta página fue creada con el propósito de poder almacenar nuestras fotos</p>
+            <div class="gallery" id="gallery">
+                <div class="page">
+                    <div class="page-inner">
+                        <div class="page-front">
+                            <img src="https://via.placeholder.com/200" alt="Sample Photo 1">
+                            <textarea placeholder="Write a note..."></textarea>
+                        </div>
+                        <div class="page-back">
+                            <button class="delete-btn" onclick="deleteImage(this)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="upload-form">
+                <input type="file" id="fileInput" accept="image/*">
+                <button type="button" class="interactive-button" onclick="uploadImage()">Sube la fotito aquí❤</button>
+            </div>
+            <div class="audio-controls">
+                <label for="audioInput">Aquí puedes cambiar la música:</label>
+                <input type="file" id="audioInput" accept="audio/mp4, audio/*" onchange="uploadMusic()">
+                <br>
+                <label for="audioUrl">O añade un enlace de música:</label>
+                <input type="text" id="audioUrl" placeholder="Pega aquí el enlace de la música">
+                <button type="button" onclick="playMusicFromUrl()">Reproducir desde URL</button>
+            </div>
+        </section>
+    </main>
+    <footer class="fade-in">
+        Hecho con mucho amor y esperanzas❤
+    </footer>
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="your-song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script>
+        // Texto dinámico en el encabezado
+        function updateHeaderText() {
+            const headerText = document.getElementById('header-text');
+            const hour = new Date().getHours();
+            let message;
+
+            if (hour < 12) {
+                message = 'Buenos días princesa, ¿cómo es que puedes amanecer siempre tan hermosa?❤';
+            } else if (hour < 18) {
+                message = 'Buenas tardes corazón de melón, recuerda que siempre pienso en ti❤';
+            } else {
+                message = 'Buenas noches amor mío, ya ve a dormir, porque hasta la luna envidia tu belleza ❤';
+            }
+
+            headerText.textContent = message;
+        }
+
+        updateHeaderText();
+
+        // Función para reproducir música desde un enlace
+        function playMusicFromUrl() {
+            const audioUrl = document.getElementById('audioUrl').value;
+            const backgroundMusic = document.getElementById('backgroundMusic');
+
+            if (audioUrl) {
+                backgroundMusic.src = audioUrl;
+                backgroundMusic.play();
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'La música está reproduciéndose desde la URL.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, ingresa un enlace válido de música.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+
+        // Función para cargar música desde un archivo
+        function uploadMusic() {
+            const audioInput = document.getElementById('audioInput');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+
+            if (audioInput.files.length > 0) {
+                const file = audioInput.files[0];
+                const fileURL = URL.createObjectURL(file); // Crear una URL temporal para el archivo
+                backgroundMusic.src = fileURL; // Asignar la nueva fuente al reproductor de audio
+                backgroundMusic.play(); // Reproducir la música
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'La música se está reproduciendo.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, selecciona un archivo de música válido.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+
+        const username = "user";
+        const password = "pass";
+        function authenticateUser() {
+            const enteredUsername = document.getElementById('username').value;
+            const enteredPassword = document.getElementById('password').value;
+            if (enteredUsername === username && enteredPassword === password) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('gallery-section').style.display = 'block';
+                document.getElementById('theme-section').style.display = 'block';
+
+                Swal.fire({
+                    title: '¡Bienvenido!',
+                    text: 'Has iniciado sesión correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Continuar'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Usuario o contraseña incorrectos.',
+                    icon: 'error',
+                    confirmButtonText: 'Intentar de nuevo'
+                });
+            }
+        }
+
+        function setTheme(themeClass) {
+            document.body.className = themeClass;
+        }
+
+        function uploadImage() {
+            const fileInput = document.getElementById('fileInput');
+            const gallery = document.getElementById('gallery');
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const page = document.createElement('div');
+                    page.className = 'page';
+
+                    const pageInner = document.createElement('div');
+                    pageInner.className = 'page-inner';
+
+                    const pageFront = document.createElement('div');
+                    pageFront.className = 'page-front';
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Uploaded Image';
+                    pageFront.appendChild(img);
+
+                    const textarea = document.createElement('textarea');
+                    textarea.placeholder = 'Write a note...';
+                    pageFront.appendChild(textarea);
+
+                    const pageBack = document.createElement('div');
+                    pageBack.className = 'page-back';
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.onclick = function() { deleteImage(deleteBtn); };
+                    pageBack.appendChild(deleteBtn);
+
+                    pageInner.appendChild(pageFront);
+                    pageInner.appendChild(pageBack);
+                    page.appendChild(pageInner);
+                    gallery.appendChild(page);
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Por favor, selecciona una imagen para subir.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+
+        function deleteImage(button) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esto eliminará la imagen permanentemente.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74c3c',
+                cancelButtonColor: '#95a5a6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const page = button.closest('.page');
+                    page.remove();
+                    Swal.fire('¡Eliminado!', 'La imagen ha sido eliminada.', 'success');
+                }
+            });
+        }
+        
+
+        document.querySelectorAll('.interactive-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.style.transform = 'scale(1.1)';
+                setTimeout(() => button.style.transform = 'scale(1)', 150);
+            });
+        });
+    </script>
+</body>
+</html>
+
